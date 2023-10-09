@@ -1,0 +1,29 @@
+#banner {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+#banner a img {
+    width: 100%;
+}
+
+#promote {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+#promote .promote__heading {
+    font-size: 30px;
+    font-family: robotoBold, sans-serif;
+    margin: 20px 0 20px 0;
+}
+
+#promote .promote__link {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+#promote .promote__link .promote__img {
+    width: 100%;
+}

@@ -1,0 +1,37 @@
+#orderPage {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable {
+    margin-bottom: 20px;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable tbody tr td button {
+    padding: 0.6em 1.2em;
+}
+
+#orderPage .cartContainer .card .card-body .btnContainer button {
+    padding: 0.6em 1.2em;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable tbody tr .imageCol {
+    width: 15%;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable tbody tr .quantityCol {
+    width: 15%;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable tbody tr td .amountAction{
+    width: 10px;
+}
+
+#orderPage .cartContainer .card .card-body .table-responsive .cartTable tbody tr td input {
+    padding: 0.6em 0.4em;
+    text-align: center;
+    outline: none;
+    display: block;
+    margin: 0;
+    width: 60px;
+}

@@ -1,0 +1,197 @@
+const Form = ({ addUser }: { addUser?: (val: UserType) => void }) => {
+    const { register, handleSubmit, watch, resetField, formState: { errors } }
+        = useForm({
+            resolver: yupResolver(schema),
+        });
+
+    const onSubmit = (data: any) => {
+        addUser?.({
+            email: data.email,
+            username: data.username,
+            fullname: data.fullname,
+            department: data.department,
+            positions: data.positions,
+            createDate: data.createDate,
+            id: data.id
+        })
+        resetField('id');
+        resetField('email');
+        resetField('username');
+        resetField('fullname');
+        resetField('department');
+        resetField('positions');
+        resetField('createDate');
+    }
+
+    const [message1, setMessage1] = useState('');
+    const [message2, setMessage2] = useState('');
+    const [message3, setMessage3] = useState('');
+    const [message4, setMessage4] = useState('');
+    const [message5, setMessage5] = useState('');
+    const [message6, setMessage6] = useState('');
+    const [message7, setMessage7] = useState('');
+
+    const handleChange1 = event1 => {
+        setMessage1(event1.target.value);
+        console.log('', event1.target.value);
+    }
+    const handleChange2 = event2 => {
+        setMessage2(event2.target.value);
+        console.log('', event2.target.value);
+    }
+    const handleChange3 = event3 => {
+        setMessage3(event3.target.value);
+        console.log('', event3.target.value);
+    }
+    const handleChange4 = event4 => {
+        setMessage4(event4.target.value);
+        console.log('', event4.target.value);
+    }
+    const handleChange5 = event5 => {
+        setMessage5(event5.target.value);
+        console.log('', event5.target.value);
+    }
+    const handleChange6 = event6 => {
+        setMessage6(event6.target.value);
+        console.log('', event6.target.value);
+    }
+    const handleChange7 = event7 => {
+        setMessage7(event7.target.value);
+        console.log('', event7.target.value);
+    }
+
+    return (
+        <form id="form" onSubmit={handleSubmit(onSubmit)}>
+
+            <div>
+                <label>ID: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('id')} onChange={handleChange1}
+                    value={message1} />
+            </div>
+
+            <div>
+                <label>Email: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('email')} onChange={handleChange2}
+                    value={message2} />
+            </div>
+
+            <div>
+                <label>Username: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('username')} onChange={handleChange3}
+                    value={message3} />
+            </div>
+
+            <div>
+                <label>Fullname: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('fullname')} onChange={handleChange4}
+                    value={message4} />
+            </div>
+
+            <div>
+                <label>Select a Department: <span>*</span></label>
+                <br></br>
+                <select id="department" {...register('department')} onChange={handleChange5}
+                    value={message5}>
+                    <option value="SAP">SAP</option>
+                    <option value="Mendix">Mendix</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Select a Positions: <span>*</span></label>
+                <br></br>
+                <select id="positions" {...register('positions')} onChange={handleChange6}
+                    value={message6}>
+                    <option value="Dev">Dev</option>
+                    <option value="Test">Test</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Date: <span>*</span></label>
+                <br></br>
+                <input type='date' {...register('createDate')} onChange={handleChange7}
+                    value={message7} />
+            </div>
+
+            <button type='submit'>Add New</button>
+        </form>
+    )
+}
+
+const FormEdit = ({ userEditing, editUser }: { userEditing?: UserType, editUser: (val: UserType) => void }) => {
+    const { register, handleSubmit, watch, resetField, formState: { errors } }
+        = useForm({
+            resolver: yupResolver(schema),
+            defaultValues: userEditing
+        });
+
+    const onSubmit = (data: any) => {
+        editUser?.({ id: data.id, email: data.email, username: data.username, fullname: data.fullname, department: data.department, positions: data.positions, createDate: data.createDate })
+        resetField('id');
+        resetField('email');
+        resetField('username');
+        resetField('fullname');
+        resetField('department');
+        resetField('positions');
+        resetField('createDate');
+    }
+
+    return (
+        <form id="form" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+                <label>ID: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('id')} />
+            </div>
+
+            <div>
+                <label>Email: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('email')} />
+            </div>
+
+            <div>
+                <label>Username: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('username')} />
+            </div>
+
+            <div>
+                <label>Fullname: <span>*</span></label>
+                <br></br>
+                <input type='text' {...register('fullname')} />
+            </div>
+
+            <div>
+                <label>Select a Department: <span>*</span></label>
+                <br></br>
+                <select id="department" {...register('department')}>
+                    <option value="SAP">SAP</option>
+                    <option value="Mendix">Mendix</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Select a Positions: <span>*</span></label>
+                <br></br>
+                <select id="positions" {...register('positions')}>
+                    <option value="Dev">Dev</option>
+                    <option value="Test">Test</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Date: <span>*</span></label>
+                <br></br>
+                <input type='date' {...register('createDate')} />
+            </div>
+
+            <button type='submit'>Add New</button>
+        </form>
+    )
+}
