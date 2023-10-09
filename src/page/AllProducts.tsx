@@ -12,35 +12,12 @@ import { addProductItem, getProductList } from "../slices/productListSlice";
 import '../components/css/modal.css'
 import './css/list.css'
 
-
-type ProductType = {
-    productName: string,
-    price: number,
-    ratingPoint: number,
-    quantity: number,
-    soldQuantity: number,
-    discount: number,
-    special: number,
-    image: string,
-    description: string,
-    createDate: string,
-}
-
 const ProductList = ({ productList, loading }) => {
     const navigate = useNavigate();
     let loadingContent
     if (loading) {
         loadingContent = <h2 style={{ marginBottom: '30px' }}>Loading....</h2>
     }
-
-    const [data, setData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
-    }
-    // const productLists = data.filter((item) =>
-    //     item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // )
 
     async function deleteProduct(id: number) {
         try {
@@ -59,15 +36,6 @@ const ProductList = ({ productList, loading }) => {
 
     return (
         <>
-            <div className="filters">
-                <input type="text"
-                    id="input-search"
-                    className="filters__textbox"
-                    placeholder="Input here"
-                    value={searchQuery}
-                    onChange={handleSearchChange} />
-                <button id="btn-search" className="btn btn-search">Search</button>
-            </div>
             <div>
                 <table id='table__result'>
                     <thead>
@@ -141,7 +109,7 @@ const ProductList = ({ productList, loading }) => {
 
 const AllProduct = ({ products }: { getProduct: () => void, products?: object, removeProduct: () => void }) => {
 
-    const [productList, setProductList] = useState<Array<ProductType>>([])
+    const [productList, setProductList] = useState([])
     const [loading, setLoading] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -164,138 +132,33 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
         setIsModalOpen(false);
     };
 
-    const [productName, setProductName] = useState('');
-    const [price, setPrice] = useState('');
-    const [ratingPoint, setRatingPoint] = useState('');
-    const [quantity, setQuantity] = useState('');
-    const [soldQuantity, setSoldQuantity] = useState('');
-    const [discount, setDiscount] = useState('');
-    const [special, setSpecial] = useState('');
-    const [image, setImage] = useState('');
-    const [createDate, setCreateDate] = useState('');
-    const [description, setDescription] = useState('');
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm()
-    const onSubmit = (data) => {
-        console.log(data)
-        addProduct(data)
-    }
-
-    async function addNewProduct() {
-        try {
-            await api.post(`/product`, {
-                productName,
-                price,
-                ratingPoint,
-                quantity,
-                soldQuantity,
-                discount,
-                special,
-                image,
-                description,
-                setCreateDate
-            })
-            getProduct();
-            setProductName('');
-            setPrice('');
-            setRatingPoint('');
-            setQuantity('');
-            setSoldQuantity('');
-            setDiscount('');
-            setSpecial('');
-            setImage('');
-            setDescription('');
-            setCreateDate('');
-            window.location.reload(false);
-        } catch (e) {
-            console.log(e);
-            alert('lol')
-        }
-    }
-
-    async function editProduct() {
-        try {
-            await api.put(`/product/${products.id}`, {
-                productName,
-                price,
-                ratingPoint,
-                quantity,
-                soldQuantity,
-                discount,
-                special,
-                image,
-                description,
-            })
-            getProduct();
-            setProductName('');
-            setPrice('');
-            setRatingPoint('');
-            setQuantity('');
-            setSoldQuantity('');
-            setDiscount('');
-            setSpecial('');
-            setImage('');
-            setDescription('');
-        } catch (e) {
-            console.log(e);
-            alert('lol')
-        }
-    }
-
-    useEffect(() => {
-        if (products) {
-            setProductName(products.productName);
-            setPrice(products.price);
-            setRatingPoint(products.ratingPoint);
-            setQuantity(products.quantity);
-            setSoldQuantity(products.soldQuantity);
-            setDiscount(products.discount);
-            setSpecial(products.special);
-            setImage(products.image);
-            setDescription(products.description);
-        }
-    }, [products])
+    const {register, handleSubmit} = useForm()
+    const onSubmit = (data) => { addProduct(data) }
 
     function removeProductChosing() {
         setProductChosing(undefined)
     }
 
-    async function getProduct() {
-        const response = await api.get(`/product`);
-        setProductList(response.data)
-    }
-
     const dispatch = useDispatch();
-
-    const [productLists, setProductLists] = useState([])
 
     async function addProduct(data) {
         try {
-            const response = await dispatch(addProductItem(data)).unwrap();
-            setProductLists(response);
-            navigate('/all-products')
+            const cloneItem = {...data}
+            await dispatch(addProductItem(cloneItem)).unwrap();
         } catch (e) {
             console.log(e)
         }
     }
 
-    async function getProductLists() {
-        try {
-            const response = await dispatch(getProductList()).unwrap();
-            setProductLists(response);
-        } catch (e) {
-            console.log(e)
-        }
-    }
+    // async function getProductLists() {
+    //     try {
+    //         const response = await dispatch(getProductList()).unwrap();
+    //         setProductLists(response);
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
 
-    useEffect(() => {
-        getProduct();
-        getProductLists();
-    }, [])
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -387,7 +250,7 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
                                 <span id="product-image"></span>
                             </div>
 
-                            <button type="submit" onClick={addNewProduct}>Add</button>
+                            <button type="submit">Add</button>
                         </form>
                     </div>
                 </div>

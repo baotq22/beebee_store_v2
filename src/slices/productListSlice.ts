@@ -1,18 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../axios-instance";
 
-export const getProductList = createAsyncThunk(
-    "productList/fetchProduct",
-    async () => {
-        const response = await api.get(`/product`)
-        return response.data
-    }
-);
+// export const getProductList = createAsyncThunk(
+//     "productList/fetchProduct",
+//     async () => {
+//         const response = await api.get(`/product`)
+//         return response.data
+//     }
+// );
 
 export const addProductItem = createAsyncThunk(
     "productList/addProduct",
     async (data) => {
-      const response = await api.post("/product", {
+      const res = await api.post("/product", {
         productName: data.productName,
         price: data.price,
         image: data.image,
@@ -24,30 +24,29 @@ export const addProductItem = createAsyncThunk(
         soldQuantity: data.soldQuantity,
         createDate: data.createDate,
       });
-      console.log(response.data)
-      return response.data;
+      console.log(res)
     }
 );
 
-export const editProductItem = createAsyncThunk(
-    "productList/editProduct",
-    async (data) => {
-      const response = await api.put("/product", {
-        productName: data.productName,
-        price: data.price,
-        image: data.image,
-        quantity: data.quantity,
-        ratingPoint: data.ratingPoint,
-        discount: data.discount,
-        special: data.special,
-        description: data.description,
-        soldQuantity: data.soldQuantity,
-        createDate: data.createDate,
-      });
-      console.log(response.data)
-      return response.data;
-    }
-);
+// export const editProductItem = createAsyncThunk(
+//     "productList/editProduct",
+//     async (data) => {
+//       const response = await api.put("/product", {
+//         productName: data.productName,
+//         price: data.price,
+//         image: data.image,
+//         quantity: data.quantity,
+//         ratingPoint: data.ratingPoint,
+//         discount: data.discount,
+//         special: data.special,
+//         description: data.description,
+//         soldQuantity: data.soldQuantity,
+//         createDate: data.createDate,
+//       });
+//       console.log(response.data)
+//       return response.data;
+//     }
+// );
 
 export const productListSlice = createSlice({
     name: 'productList',
@@ -59,11 +58,11 @@ export const productListSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(getProductList.fulfilled, (state, action) => {
-                state.value = action.payload;
-            })
+            // .addCase(getProductList.fulfilled, (state, action) => {
+            //     state.value = action.payload;
+            // })
             .addCase(addProductItem.fulfilled, (state, action) => {
-                state.value = action.payload;
+                state.value.push(action.payload);
             })
     }
 })

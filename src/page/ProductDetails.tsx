@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../axios-instance";
-import ModalOrder from "../components/ModalOrder";
 import Header from "../components/Header";
 import { checkLogin } from "../checkLogin";
 import { useDispatch } from "react-redux";
@@ -10,10 +9,10 @@ import './css/ProductDetails.css'
 import Footer from "../components/Footer";
 
 const ProductDetail = () => {
-    const [product, setProduct] = useState();
 
     const params = useParams();
     const productId = params.productId;
+    const [product, setProduct] = useState();
 
     useEffect(() => {
         api.get(`/product/${productId}`).then(res => {
@@ -24,20 +23,17 @@ const ProductDetail = () => {
     checkLogin();
     // const dispatch = useDispatch();
 
-    const chooseProduct = (item: any) => {
-        const cartList = localStorage.getItem('cart');
-        const cartListArray = JSON.parse(cartList) || [];
-        // dispatch(addProductToList(product));
+    const cartList = localStorage.getItem('cart');
+    const cartListArray = JSON.parse(cartList) || [];
+
+    async function chooseProduct(item) {
         const cart = [...cartListArray, item]
+        // dispatch(addProductToList(product));
         localStorage.setItem('cart', JSON.stringify(cart));
-    
-        alert('Added to Cart successfully')
+        // alert('Added to Cart successfully')
     }
 
-    useEffect(() => {
-        chooseProduct();
-    })
-    
+    const addToCart = chooseProduct(product);
 
     return (
         <div id='productDetail'>
@@ -52,6 +48,7 @@ const ProductDetail = () => {
                                 </div>
                             </div>
                             <div className="details col-md-6">
+                            <small className="products__sale">{product?.discount}% DISCOUNT</small>
                                 <h3 className="product-title">{product?.productName}</h3>
                                 <div className="rating">
                                     <div className="stars">
@@ -65,9 +62,12 @@ const ProductDetail = () => {
                                 </div>
                                 <p className="product-description">{product?.description}</p>
                                 <h4 className="price">current price: <span>${product?.price}</span></h4>
-                                <p className="vote"><strong>{product?.soldQuantity}</strong> of buyers enjoyed this product! <strong>({product?.quantity} in Stock)</strong></p>
+                                <h2 className="vote"><strong>{product?.soldQuantity}</strong> of buyers enjoyed this product! <strong>({product?.quantity} in Stock)</strong></h2>
+                                <h2 className="vote"><strong>Special offers?</strong><span><h3>{product?.special}% protion pay</h3></span></h2>
+                                
+                                
                                 <div className="action">
-                                    <button className="add-to-cart btn btn-default" onClick={chooseProduct(product)}>add to cart</button>
+                                    <button className="add-to-cart btn btn-default" onClick={addToCart}>add to cart</button>
                                     <button className="like btn btn-default" type="button"><span className="fa fa-heart"></span></button>
                                 </div>
                             </div>

@@ -79,14 +79,6 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage, setProductsPerPage] = useState(12);
 
-    async function getProduct() {
-        const response = await api.get(`/product`);
-    }
-
-    useEffect(() => {
-        getProduct();
-    }, [])
-
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);

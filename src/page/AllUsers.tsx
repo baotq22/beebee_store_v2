@@ -51,11 +51,6 @@ async function addUser() {
     }
 }
 
-const now = new Date();
-const date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "." + now.getMilliseconds() + "Z";
-const dateTime = date + 'T' + time;
-
 const AllUser = () => {
     const [userList, setUserList] = useState<Array<UserType>>([])
     const [loading, setLoading] = useState(false);
@@ -67,8 +62,6 @@ const AllUser = () => {
     const currentUsers = userList.slice(indexOfFirstUser, indexOfLastUser);
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
-
-    const [userEdit, setUserEdit] = useState<UserType>();
 
     const getUsers = async () => {
         const res = await axios.get(`https://64f71db49d77540849531dc0.mockapi.io/users`);
@@ -141,6 +134,7 @@ const AllUser = () => {
     }, [])
 
     const UserList = ({ userList, loading }) => {
+        const navigate = useNavigate();
         let loadingContent
         if (loading) {
             loadingContent = <h2 style={{ marginBottom: '30px' }}>Loading....</h2>

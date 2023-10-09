@@ -8,8 +8,6 @@ import { logout } from "../slices/userLoginSlice";
 function Header() {
     const navigate = useNavigate();
 
-    const productList = useSelector(state => state.productChosenList)
-
     // console.log(productList.length);
 
     const userLogin = useSelector(state => state.userLogin);

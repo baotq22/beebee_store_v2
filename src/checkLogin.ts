@@ -13,7 +13,6 @@ export function checkLogin() {
         if (!userLogin?.username && !userLogin.password && !usernameLocalStorage && !passwordLocalStorage) {
             navigate('/login')
         }
-        console.log(userLogin);
     }, [userLogin?.username, !userLogin.password]);
 
     // useEffect(() => {
