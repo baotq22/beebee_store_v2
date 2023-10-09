@@ -30,10 +30,15 @@ const ProductDetail = () => {
         const cart = [...cartListArray, item]
         // dispatch(addProductToList(product));
         localStorage.setItem('cart', JSON.stringify(cart));
-        // alert('Added to Cart successfully')
+        alert('Added to Cart successfully')
+        window.location.reload(false);
     }
 
-    const addToCart = chooseProduct(product);
+    const addToCart = () => {
+        console.log('Add to Cart clicked');
+        console.log('Product:', product);
+        chooseProduct(product);
+    }
 
     return (
         <div id='productDetail'>
@@ -48,7 +53,7 @@ const ProductDetail = () => {
                                 </div>
                             </div>
                             <div className="details col-md-6">
-                            <small className="products__sale">{product?.discount}% DISCOUNT</small>
+                                <small className="products__sale">{product?.discount}% DISCOUNT</small>
                                 <h3 className="product-title">{product?.productName}</h3>
                                 <div className="rating">
                                     <div className="stars">
@@ -64,8 +69,8 @@ const ProductDetail = () => {
                                 <h4 className="price">current price: <span>${product?.price}</span></h4>
                                 <h2 className="vote"><strong>{product?.soldQuantity}</strong> of buyers enjoyed this product! <strong>({product?.quantity} in Stock)</strong></h2>
                                 <h2 className="vote"><strong>Special offers?</strong><span><h3>{product?.special}% protion pay</h3></span></h2>
-                                
-                                
+
+
                                 <div className="action">
                                     <button className="add-to-cart btn btn-default" onClick={addToCart}>add to cart</button>
                                     <button className="like btn btn-default" type="button"><span className="fa fa-heart"></span></button>

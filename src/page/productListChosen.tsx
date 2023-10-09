@@ -33,7 +33,7 @@ const ProductChosen = () => {
     const cartListArray = localStorage.getItem('cart') || [];
 
     const [updateCart, setUpdateCart] = useState([]);
-    const objectToDelete = {}
+    const productToDelete = {}
     useEffect(() => {
         if (cartListArray) {
             const parsedData = JSON.parse(cartListArray);
@@ -43,10 +43,11 @@ const ProductChosen = () => {
     }, [])
 
 
-    const DeleteProduct = () => {
-        const updatedData = updateCart.filter(item => item.id !== objectToDelete.id);
+    const DeleteProduct = (productToDelete) => {
+        const updatedData = updateCart.filter(item => item.id !== productToDelete.id);
         localStorage.setItem('cart', JSON.stringify(updatedData));
-        setUpdateCart(updatedData)
+        setUpdateCart(updatedData);
+        window.location.reload(false);
     }
 
     const [columnSum, setColumnSum] = useState(0);
@@ -122,7 +123,7 @@ const ProductChosen = () => {
                                 <img src={item.image} style={{ width: '100%' }} />
                             </td>
                             <td className='nameCol'>
-                                <Link to={`/product/${item.id}`}><p>{item.name}</p></Link>
+                                <Link to={`/product/${item.id}`}><p>{item.productName}</p></Link>
                             </td>
                             <td className='priceCol'>${item.price}</td>
                             <td className='quantityCol'>
@@ -138,17 +139,17 @@ const ProductChosen = () => {
                             </td>
                             <td className='totalCol'>${item.price * item.count}</td>
                             <td className='actionCol'>
-                                <button onClick={DeleteProduct}>Delete</button>
+                                <button onClick={() => DeleteProduct(item)}>Delete</button>
                             </td>
                         </tr>
                     )
                 }
             </>
     } else {
-        cartLength = 
-        <tr>
-            <td colSpan={6}>Oops! There is no item in your cart. Comeback to Homepage then shopping!</td>
-        </tr>
+        cartLength =
+            <tr>
+                <td colSpan={6}>Oops! There is no item in your cart. Comeback to Homepage then shopping!</td>
+            </tr>
     }
 
     return (

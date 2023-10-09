@@ -1,14 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../axios-instance";
 
-// export const getProductList = createAsyncThunk(
-//     "productList/fetchProduct",
-//     async () => {
-//         const response = await api.get(`/product`)
-//         return response.data
-//     }
-// );
-
 export const addProductItem = createAsyncThunk(
     "productList/addProduct",
     async (data) => {
@@ -58,9 +50,6 @@ export const productListSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            // .addCase(getProductList.fulfilled, (state, action) => {
-            //     state.value = action.payload;
-            // })
             .addCase(addProductItem.fulfilled, (state, action) => {
                 state.value.push(action.payload);
             })

@@ -69,26 +69,6 @@ const AllUser = () => {
 
     checkLogin();
 
-    // function editUser(index: number) {
-    //     // setUserEdit({ ...userList[index], position: index })
-    //     setIsModalOpen(true);
-    // }
-
-    // function updateUser(user: UserType) {
-    //     setUserEdit(undefined);
-    //     const listUserClone = [...userList];
-    //     listUserClone[user.position] = {
-    //         id: user.id,
-    //         email: user.email,
-    //         username: user.username,
-    //         fullname: user.fullname,
-    //         department: user.department,
-    //         positions: user.positions,
-    //         createDate: user.createDate
-    //     }
-    //     setUserList(listUserClone);
-    // }
-
     async function addNewUserDirectly() {
         try {
             await axios.post(`https://64f71db49d77540849531dc0.mockapi.io/users`)

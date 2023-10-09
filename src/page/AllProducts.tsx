@@ -145,20 +145,12 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
         try {
             const cloneItem = {...data}
             await dispatch(addProductItem(cloneItem)).unwrap();
+            alert('Added Successfully!')
+            window.location.reload(false);
         } catch (e) {
             console.log(e)
         }
     }
-
-    // async function getProductLists() {
-    //     try {
-    //         const response = await dispatch(getProductList()).unwrap();
-    //         setProductLists(response);
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
-
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -244,7 +236,6 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
 
                             <div className='inputContainer'>
                                 <label className='inputTitle'>IMAGE: <span>*</span></label>
-                                {/* <label htmlFor="image" className="button__upload" id="btn-upload-image">Upload</label> */}
                                 <br />
                                 <input type="file" id="image" {...register("image", { required: true })} />
                                 <span id="product-image"></span>
