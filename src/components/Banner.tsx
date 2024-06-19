@@ -11,13 +11,13 @@ const Banner = () => {
                 </a>
             </div>
             <div id="promote">
-            <div className="container">
-                <h3 className="promote__heading">BIG SALE TODAY</h3>
-                <a href="#" className="promote__link">
-                    <img src={promote} alt="" className="promote__img" />
-                </a>
+                <div className="container">
+                    <h3 className="promote__heading">BIG SALE TODAY</h3>
+                    <a href="#" className="promote__link">
+                        <img src={promote} alt="" className="promote__img" />
+                    </a>
+                </div>
             </div>
-        </div>
         </>
     )
 }

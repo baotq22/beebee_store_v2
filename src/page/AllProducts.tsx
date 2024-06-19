@@ -1,14 +1,11 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { api } from "../axios-instance";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
-import { checkLogin } from "../checkLogin";
 import Header from "../components/Header";
-import { ProductChosenContext } from "../App";
 import { useDispatch } from "react-redux";
-import { addProductItem, getProductList } from "../slices/productListSlice";
+import { addProductItem, editProductItem } from "../slices/productListSlice";
 import '../components/css/modal.css'
 import './css/list.css'
 
@@ -31,6 +28,62 @@ const ProductList = ({ productList, loading }) => {
             window.location.reload(false);
         } catch (e) {
             alert('lol');
+        }
+    }
+
+    const dispatch = useDispatch();
+
+    async function editProduct(data) {
+        try {
+            const cloneItem = { ...data }
+            const product_id = selectedProductId;
+            await dispatch(editProductItem({ productId: product_id, ...cloneItem })).unwrap();
+            alert('Updated Successfully!')
+            window.location.reload(false);
+        } catch (e) {
+            console.log(e)
+            alert('Edit Failed!')
+        }
+    }
+
+    const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+
+    const openEditModal = (productId) => {
+        setSelectedProductId(productId);
+        setIsModalEditOpen(true);
+    }
+
+    const closeEditModal = () => {
+        setIsModalEditOpen(false);
+    }
+
+    const [editedProductData, setEditedProductData] = useState(null);
+
+    useEffect(() => {
+        if (selectedProductId !== null) {
+          // Fetch the product data by ID and set it in the state.
+          const fetchProductById = async () => {
+            try {
+              const response = await axios.get(
+                `https://64f71db49d77540849531dc0.mockapi.io/product/${selectedProductId}`
+              );
+              setEditedProductData(response.data);
+              console.log(selectedProductId)
+            } catch (error) {
+              console.error("Error fetching product data:", error);
+            }
+          };
+      
+          fetchProductById();
+        }
+      }, [selectedProductId]);
+      
+
+    const { register, handleSubmit } = useForm()
+    const onSubmit = (data) => {
+        if (selectedProductId !== null) { // Step 5
+            editProduct(data);
         }
     }
 
@@ -94,7 +147,7 @@ const ProductList = ({ productList, loading }) => {
                                     </td>
                                     <td>
                                         <button id='actionBtn' onClick={() => navigate(`/product/${product.id}`)}>Details</button>
-                                        <button id='actionBtn'>Edit</button>
+                                        <button id='actionBtn' onClick={() => openEditModal(product.id)}>Edit</button>
                                         <button id='actionBtn' onClick={() => deleteProduct(product.id)}>Delete</button>
                                     </td>
                                 </tr>
@@ -102,6 +155,78 @@ const ProductList = ({ productList, loading }) => {
                         }
                     </tbody>
                 </table>
+                {isModalEditOpen && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <button className='close-button' onClick={closeEditModal}>
+                                <i className="fa-solid fa-xmark"></i>
+                            </button>
+                            <h1 className='formTitle'>Log in</h1>
+                            <form id="form" onSubmit={handleSubmit(onSubmit)}>
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>PRODUCT NAME: <span>*</span></label>
+                                    <br></br>
+                                    <input className='inputArea' type='text' id='productName' {...register("productName", { required: true, maxLength: 30 })} defaultValue={editedProductData?.productName || ""} />
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>PRICE: <span>*</span></label>
+                                    <br></br>
+                                    <input className='inputArea' type='number' id='price' {...register("price", { required: true })} defaultValue={editedProductData?.price || ""} />
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>RATING POINT: <span>*</span></label>
+                                    <br></br>
+                                    <input className='inputArea' type='number' id='ratingPoint' {...register("ratingPoint", { required: true })} defaultValue={editedProductData?.ratingPoint || ""} />
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>QUANTITY: <span>*</span></label>
+                                    <br></br>
+                                    <input className='inputArea' type='number' id='quantity' {...register("quantity", { required: true })} defaultValue={editedProductData?.quantity || ""}></input>
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>SOLD QUANTITY: <span>*</span></label>
+                                    <br></br>
+                                    <input className='inputArea' type='number' id='soldQuantity' {...register("soldQuantity", { required: true })} defaultValue={editedProductData?.soldQuantity || ""} />
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>DESCRIPTION: <span>*</span></label>
+
+                                    <input type="text" className='inputArea' id='description' {...register("description", { required: true })} defaultValue={editedProductData?.description || ""} />
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>% DISCOUNT: <span>*</span></label>
+                                    <select className='selectArea' style={{ marginRight: '30px' }} id="discount" {...register("discount", { required: true })} defaultValue={editedProductData?.discount || ""}>
+                                        <option value="7.5">7.5</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <label className='inputTitle'>SPECIAL: <span>*</span></label>
+                                    <select className='selectArea' id="special" {...register("special", { required: true })} defaultValue={editedProductData?.special || ""}>
+                                        <option value="0">0</option>
+                                        <option value="5">5</option>
+                                        <option value="7">7</option>
+                                    </select>
+                                </div>
+
+                                <div className='inputContainer'>
+                                    <label className='inputTitle'>IMAGE: <span>*</span></label>
+                                    <br />
+                                    <input type="file" id="image" {...register("image", { required: true })} />
+                                    <span id="product-image"></span>
+                                </div>
+
+                                <button type="submit">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     )
@@ -120,8 +245,6 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const [productChosing, setProductChosing] = useState()
-    const productContext = useContext(ProductChosenContext);
-    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -132,7 +255,7 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
         setIsModalOpen(false);
     };
 
-    const {register, handleSubmit} = useForm()
+    const { register, handleSubmit } = useForm()
     const onSubmit = (data) => { addProduct(data) }
 
     function removeProductChosing() {
@@ -143,12 +266,13 @@ const AllProduct = ({ products }: { getProduct: () => void, products?: object, r
 
     async function addProduct(data) {
         try {
-            const cloneItem = {...data}
+            const cloneItem = { ...data }
             await dispatch(addProductItem(cloneItem)).unwrap();
             alert('Added Successfully!')
             window.location.reload(false);
         } catch (e) {
             console.log(e)
+            alert('Add Failed!')
         }
     }
 

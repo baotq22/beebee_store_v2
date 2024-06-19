@@ -35,8 +35,6 @@ const ProductDetail = () => {
     }
 
     const addToCart = () => {
-        console.log('Add to Cart clicked');
-        console.log('Product:', product);
         chooseProduct(product);
     }
 

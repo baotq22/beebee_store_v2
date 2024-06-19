@@ -8,10 +8,6 @@ import { useEffect, useState } from "react";
 import './css/orderPage.css'
 import { api } from "../axios-instance";
 
-const updateQuantity = async () => {
-    const response = await api.put(`/product?quantity`)
-}
-
 const ProductChosen = () => {
     // const productChosenContext = useContext(ProductChosenContext)
     // const { productList } = productChosenContext
@@ -20,14 +16,33 @@ const ProductChosen = () => {
 
     const productList = useSelector(state => state.productChosenList)
 
-    const SuccessOrder = () => {
+    const SuccessOrder = async () => {
         if (updateCart.length > 0) {
-            alert('Successfully Order ' + updateCart.length + ' product(s)\nPress OK to direct to homepage')
-            localStorage.setItem('cart', '[]');
-            navigate(`/`)
-        } else {
-            alert('Your cart is empty')
-        }
+            const apiCalls = [];
+      
+            const updatedCart = updateCart.map((item) => {
+              if (item.count > 0) {
+                item.count -= 1;
+                const apiCall = api.put(`/product/${item.id}`, { quantity: item.count });
+                apiCalls.push(apiCall);
+              }
+              return item;
+            });
+      
+            try {
+              await Promise.all(apiCalls);
+      
+              localStorage.setItem('cart', JSON.stringify(updatedCart));
+      
+              alert(`Successfully Order ${updateCart.length} product(s)\nPress OK to direct to homepage`);
+              localStorage.setItem('cart', '[]');
+              navigate(`/`);
+            } catch (error) {
+              console.error("API call error:", error);
+            }
+          } else {
+            alert('Your cart is empty');
+          }
     }
 
     const cartListArray = localStorage.getItem('cart') || [];

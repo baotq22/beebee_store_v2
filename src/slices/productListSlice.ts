@@ -16,29 +16,26 @@ export const addProductItem = createAsyncThunk(
         soldQuantity: data.soldQuantity,
         createDate: data.createDate,
       });
-      console.log(res)
     }
 );
 
-// export const editProductItem = createAsyncThunk(
-//     "productList/editProduct",
-//     async (data) => {
-//       const response = await api.put("/product", {
-//         productName: data.productName,
-//         price: data.price,
-//         image: data.image,
-//         quantity: data.quantity,
-//         ratingPoint: data.ratingPoint,
-//         discount: data.discount,
-//         special: data.special,
-//         description: data.description,
-//         soldQuantity: data.soldQuantity,
-//         createDate: data.createDate,
-//       });
-//       console.log(response.data)
-//       return response.data;
-//     }
-// );
+export const editProductItem = createAsyncThunk(
+    "productList/editProduct",
+    async (data) => {
+      const res = await api.put(`/product/${data.productId}`, {
+        productName: data.productName,
+        price: data.price,
+        image: data.image,
+        quantity: data.quantity,
+        ratingPoint: data.ratingPoint,
+        discount: data.discount,
+        special: data.special,
+        description: data.description,
+        soldQuantity: data.soldQuantity,
+        createDate: data.createDate,
+      });
+    }
+);
 
 export const productListSlice = createSlice({
     name: 'productList',
@@ -53,5 +50,12 @@ export const productListSlice = createSlice({
             .addCase(addProductItem.fulfilled, (state, action) => {
                 state.value.push(action.payload);
             })
+            .addCase(editProductItem.fulfilled, (state, action) => {
+              const updatedProduct = action.payload;
+              const index = state.value.findIndex(product => product.id === updatedProduct.id);
+              if (index !== -1) {
+                  state.value[index] = updatedProduct;
+              }
+          })
     }
 })
